@@ -95,27 +95,36 @@ int main() {
 
     for (unsigned short i = 0; i < n; i++) fscanf(f, "%s %s %hu %s %hu", list[i].surname, list[i].name, &list[i].year_birth, list[i].gender, &list[i].height);
     fclose(f);
-    for (unsigned short i = 0; i < n; i++) printf("%s %s %hu %s %hu\n", list[i].surname, list[i].name, list[i].year_birth, list[i].gender, list[i].height);
-    printf("= = = = = = = = = = = = = = = = = = = =\n\n");
+    ///for (unsigned short i = 0; i < n; i++) printf("%s %s %hu %s %hu\n", list[i].surname, list[i].name, list[i].year_birth, list[i].gender, list[i].height);
 
-    char option[20] = "";
-    printf("Опции: name surname birth gender height\n\n");
+    short opers = 0;
     do {
-        printf("По какому полю хотите сортировать?");
-        scanf("%s", option);}
-    while ((strcmp(option, "name") != 0) && (strcmp(option, "surname") != 0) && (strcmp(option, "birth") != 0) && (strcmp(option, "gender") != 0) && (strcmp(option, "height") != 0));
-    sorting(option, list, n);
-    printf("Отсортированный список людей по параметру: %s\n\n", option);
+        printf("Задайте количество полей для сортировки: ");
+        scanf("%hd", &opers);
+    } while ((opers > 5) || (opers < 1));
 
-    FILE *fw;
-    fw = fopen("people_sorted.txt", "w");
-    if (fw == NULL) {
-        printf("Ошибка открытия файла для записи");
-        return -2;
+    for (unsigned k = 0; k < opers; k++) {
+        char option[20] = "";
+        printf("Опции: 'name' 'surname' 'birth' 'gender' 'height'\n\n");
+        do {
+            printf("По какому полю хотите отсортировать?\t");
+            scanf("%s", option);
+        } while ((strcmp(option, "name") != 0) && (strcmp(option, "surname") != 0) && (strcmp(option, "birth") != 0) &&
+                 (strcmp(option, "gender") != 0) && (strcmp(option, "height") != 0));
+        sorting(option, list, n);
+        printf("Список отсортирован по параметру [%s]\n\n", option);
+
+        FILE *fw;
+        fw = fopen("people_sorted.txt", "w");
+        if (fw == NULL) {
+            printf("Ошибка открытия файла для записи");
+            return -2;
+        }
+        for (unsigned short i = 0; i < n; i++) fprintf(fw, "%s %s %hu %s %hu\n", list[i].surname, list[i].name, list[i].year_birth, list[i].gender, list[i].height);
+        fclose(fw);
+        ///for (unsigned short i = 0; i < n; i++) printf("%s %s %hu %s %hu\n", list[i].surname, list[i].name, list[i].year_birth, list[i].gender, list[i].height);
     }
-    for (unsigned short i = 0; i < n; i++) fprintf(fw,"%s %s %hu %s %hu\n", list[i].surname, list[i].name, list[i].year_birth, list[i].gender, list[i].height);
-    fclose(fw);
-    for (unsigned short i = 0; i < n; i++) printf("%s %s %hu %s %hu\n", list[i].surname, list[i].name, list[i].year_birth, list[i].gender, list[i].height);
 
+    printf("Сортировка завершена (◕‿◕)");
     return 0;
 }
